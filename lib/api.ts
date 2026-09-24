@@ -4,11 +4,12 @@
 const BASE = process.env.NEXT_PUBLIC_API_BASE ?? '';
 const KEY = process.env.API_KEY ?? '';
 
-// --- shapes returned by the backend (mirrors /admin/trips + /admin/trips/:id) ---
+// --- shapes returned by the backend ---
 
 export interface TripSummary {
   trip_id: string;
   volunteer_code: string | null;
+  volunteer_name: string | null;
   started_at: string | null;
   ended_at: string | null;
   total_minutes: number | null;
@@ -16,12 +17,12 @@ export interface TripSummary {
   leg_count: number;
   has_metro_arrival: boolean;
   overall_confidence: number | null;
-  quality: string; // ok | sparse | short | empty
+  quality: string;
   analyzed_at: string | null;
 }
 
 export interface JourneyLeg {
-  kind: string; // walking | moving | waiting | stopped
+  kind: string;
   startedAt: string;
   endedAt: string;
   seconds: number;
@@ -29,7 +30,7 @@ export interface JourneyLeg {
   maxSpeedKmh: number;
   confidence: number | null;
   mode?: {
-    label: string; // 'vehicle' | e-rickshaw | car | metro
+    label: string;
     lean: string;
     confidence: number;
   };
@@ -59,6 +60,7 @@ export interface TripDetail {
   summary: {
     tripId: string;
     volunteerCode: string | null;
+    volunteerName: string | null;
     startedAt: string | null;
     endedAt: string | null;
     totalMinutes: number | null;
@@ -92,7 +94,6 @@ async function get<T>(path: string): Promise<T> {
   if (!BASE) throw new Error('NEXT_PUBLIC_API_BASE is not set');
   const res = await fetch(`${BASE}${path}`, {
     headers: { 'x-api-key': KEY },
-    // Always fetch fresh — trip data changes as volunteers upload.
     cache: 'no-store',
   });
   if (!res.ok) {
