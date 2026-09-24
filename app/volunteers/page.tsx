@@ -1,7 +1,7 @@
 import { fetchVolunteers } from '@/lib/api';
 import PageHeader from '../components/PageHeader';
 import StatCard from '../components/StatCard';
-import VolunteersTable from '../components/VolunteersTable';
+import VolunteerList from '../components/VolunteerList';
 
 export default async function VolunteersPage() {
   const { count, volunteers } = await fetchVolunteers();
@@ -33,9 +33,11 @@ export default async function VolunteersPage() {
       <div>
         <div className="mb-3 flex items-baseline justify-between">
           <h2 className="text-lg font-semibold">All volunteers</h2>
-          <span className="text-sm text-gray-500 dark:text-gray-400">{count} total</span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            click a volunteer to see their trips
+          </span>
         </div>
-        <VolunteersTable volunteers={volunteers} />
+        <VolunteerList volunteers={volunteers} />
       </div>
     </div>
   );
