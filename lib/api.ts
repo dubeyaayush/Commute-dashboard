@@ -77,6 +77,15 @@ export interface TripDetail {
   manualLabels: ManualLabel[];
 }
 
+export interface VolunteerRow {
+  code: string;
+  name: string | null;
+  phone: string | null;
+  city: string | null;
+  createdAt: string | null;
+  tripCount: number;
+}
+
 // --- fetchers ---
 
 async function get<T>(path: string): Promise<T> {
@@ -107,4 +116,11 @@ export async function fetchTrips(params?: {
 
 export async function fetchTrip(id: string): Promise<TripDetail> {
   return get(`/admin/trips/${encodeURIComponent(id)}`);
+}
+
+export async function fetchVolunteers(): Promise<{
+  count: number;
+  volunteers: VolunteerRow[];
+}> {
+  return get('/admin/volunteers');
 }
